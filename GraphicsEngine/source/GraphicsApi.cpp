@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include <iostream>
 #include "GraphicsApi.h"
 #include "MeshRenderer.h"
@@ -8,9 +9,14 @@ Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context
 {
 	glfwMakeContextCurrent(context);
 
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "[GraphicsEngine] Failed to initialize GLAD\n";;
+	}
+
 	if (!glad_glClear) 
 	{
-		std::cout << "[GraphicsEngine] GLAD not loaded!" << std::endl;
+		std::cout << "[GraphicsEngine] GLAD not loaded!\n" << std::endl;
 	}
 
 	glEnable(GL_DEPTH_TEST);
@@ -29,8 +35,7 @@ Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context
 		return;
 	}
 
-	MeshType meshTypeFromInt = static_cast<MeshType>(meshType);
-	meshRenderer = new MeshRenderer(meshTypeFromInt, camera);
+	meshRenderer = new MeshRenderer(meshType, camera);
 	meshRenderer->SetProgram(shaderProgram);
 	meshRenderer->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	meshRenderer->SetScale(glm::vec3(1.0f));

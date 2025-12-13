@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include <iostream>
+#include "GraphicsApi.h"
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -27,7 +28,7 @@ int main()
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Main Engine", NULL, NULL);
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		std::cout << "[MainEngine] Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
@@ -37,9 +38,11 @@ int main()
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD";
+		std::cout << "[MainEngine] Failed to initialize GLAD";
 		return -1;
 	}
+
+	Graphics* graphics = GetGraphicsEngine(WIDTH, HEIGHT, MeshType::SPHERE, window);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -47,11 +50,14 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		graphics->Render();
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 		HandleInput(window);
 	}
 
+	DeleteGraphicsEngine(graphics);
 	glfwTerminate();
 
 	return 0;

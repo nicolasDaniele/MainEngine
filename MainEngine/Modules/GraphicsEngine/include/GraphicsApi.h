@@ -24,9 +24,9 @@ public:
 	Camera* GetCamera();
 
 private:
-	Camera* camera = nullptr;
-	MeshRenderer* meshRenderer = nullptr;
-	ShaderLoader* shaderLoader = nullptr;
+	Camera* camera;
+	MeshRenderer* meshRenderer;
+	ShaderLoader* shaderLoader;
 };
 
 extern "C"
