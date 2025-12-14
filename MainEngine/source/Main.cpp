@@ -54,24 +54,24 @@ int main()
 	cameraParams.height = HEIGHT;
 	cameraParams.nearPlane = 0.1f;
 	cameraParams.farPlane = 100.0f;
-	cameraParams.position = glm::vec3(0.0f, 0.0f, 3.0f);
+	cameraParams.position = glm::vec3(0.0f, 0.0f, 6.0f);
 
 	Graphics* graphics = GetGraphicsEngine(window, cameraParams);
 
-	MeshRenderer* sphereRenderer = CreateMeshRenderer(MeshType::SPHERE, graphics->GetCamera(),
+	MeshRenderer* ball = CreateMeshRenderer(MeshType::SPHERE, graphics->GetCamera(),
 		glm::vec3(0.0f),
-		glm::vec3(0.6f),
-		glm::vec3(1.0f, 0.2f, 0.0f),
-		FLAT_VS_PATH, FLAT_FS_PATH);
-
-	MeshRenderer* cubeRenderer = CreateMeshRenderer(MeshType::CUBE, graphics->GetCamera(),
-		glm::vec3(1.5f, 0.0f, 0.0f),
 		glm::vec3(0.5f),
-		glm::vec3(0.0f, 1.0f, 0.0f),
+		glm::vec3(0.9f, 0.2f, 0.0f),
 		FLAT_VS_PATH, FLAT_FS_PATH);
 
-	AddMeshRendererToGraphicsEngine(sphereRenderer, graphics);
-	AddMeshRendererToGraphicsEngine(cubeRenderer, graphics);
+	MeshRenderer* floor = CreateMeshRenderer(MeshType::CUBE, graphics->GetCamera(),
+		glm::vec3(0.0f, -2.0f, 0.0f),
+		glm::vec3(4.0f, 0.2f, 4.0f),
+		glm::vec3(0.2f, 0.8f, .2f),
+		FLAT_VS_PATH, FLAT_FS_PATH);
+
+	AddMeshRendererToGraphicsEngine(ball, graphics);
+	AddMeshRendererToGraphicsEngine(floor, graphics);
 
 	while (!glfwWindowShouldClose(window))
 	{

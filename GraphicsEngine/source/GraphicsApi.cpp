@@ -5,6 +5,7 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "ShaderLoader.h"
+//#include "TextureLoader.h"
 
 Graphics::Graphics(GLFWwindow* context, CameraParams cameraParams)
 {
@@ -74,9 +75,17 @@ extern "C"
 		GLuint shaderProgram = shaderLoader.CreateProgram(vertexShaderPath,
 														fragmentShaderPath);
 
+
 		MeshRenderer* newMeshRenderer = new MeshRenderer(meshType, camera, 
 											position, scale, color);
 		newMeshRenderer->SetProgram(shaderProgram);
+	
+		// If receivie textured shaders, load textures like this
+		// @TODO: Ideally detect if it is receiving textured or flat color shaders and load the
+		// texture only if it corresponds and also enable it in MeshRenderer.cpp
+		/*TextureLoader tLoader;
+		GLuint texture = tLoader.GetTextureID("Assets/Textures/wood.jpg");*/
+		//newMeshRenderer->SetTexture(texture);
 
 		return newMeshRenderer;
 	}

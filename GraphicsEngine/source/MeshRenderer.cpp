@@ -43,7 +43,8 @@ MeshRenderer::MeshRenderer(MeshType _modelType, Camera* _camera,
 		(void*)(offsetof(Vertex, Vertex::color)));
 
 	// Enable TexCoord
-	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+	/*glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(void*)(offsetof(Vertex, Vertex::texCoords)));*/
 
 
