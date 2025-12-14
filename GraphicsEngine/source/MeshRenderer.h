@@ -8,7 +8,10 @@ class Camera;
 class MeshRenderer
 {
 public:
-	MeshRenderer(MeshType modelType, Camera* _camera);
+	MeshRenderer(MeshType _modelType, Camera* _camera,
+		glm::vec3 _position = glm::vec3(0.0f),
+		glm::vec3 _scale = glm::vec3(1.0f),
+		glm::vec3 _color = glm::vec3(1.0f));
 	~MeshRenderer() {}
 
 	void Draw();
@@ -29,4 +32,3 @@ private:
 	float rotation;
 	GLuint vao, vbo, ebo, texture, program;
 };
-

@@ -1,7 +1,7 @@
 #include <vector>
 #include "Mesh.h"
 
-void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {
+void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color) {
 	vertices.clear();
 	indices.clear();
 
@@ -10,21 +10,21 @@ void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 		{ 
 			{ -1.0f, -1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 1.0f, 0.0f, 0.0f },	// Color
+			color,					// Color
 			{ 0.0f, 0.0f }			// Texture Coordinate
 		},
 		// Vertex 1 (bottom right)
 		{ 
 			{ 1.0f, -1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 0.0f, 1.0f, 0.0f },	// Color
+			color,					// Color
 			{ 1.0f, 0.0f }			// Texture Coordinate
 		},
 		// Vertex 2 (top)
 		{ 
 			{ 0.0f, 1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 0.0f, 0.0f, 1.0f },	// Color
+			color,					// Color
 			{ 0.5f, 1.0f }			// Texture Coordinate
 		}
 	};
@@ -34,7 +34,7 @@ void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 	};
 }
 
-void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
 {
 	vertices.clear();
 	indices.clear();
@@ -44,28 +44,28 @@ void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 		{
 			{ 1.0f, 1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 1.0f, 1.0f, 1.0f },	// Color
+			color,					// Color
 			{ 1.0f, 1.0f }			// Texture Coordinate
 		},
 		// Vertex 1 (bottom right)
 		{
 			{ 1.0f, -1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 1.0f, 1.0f, 1.0f },	// Color
+			color,					// Color
 			{ 1.0f, 0.0f }			// Texture Coordinate
 		},
 		// Vertex 2 (bottom left)
 		{
 			{ -1.0f, -1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 1.0f, 1.0f, 1.0f },	// Color
+			color,					// Color
 			{ 0.0f, 0.0f }			// Texture Coordinate
 		},
 		// Vertex 3 (top left)
 		{
 			{ -1.0f, 1.0f, 0.0f },	// Position
 			{ 0.0f, 0.0f, 1.0f },	// Normal
-			{ 1.0f, 1.0f, 1.0f },	// Color
+			color,					// Color
 			{ 0.0f, 1.0f }			// Texture Coordinate
 		}
 	};
@@ -76,61 +76,61 @@ void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 	};
 }
 
-void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
 {
 	vertices.clear(); 
 	indices.clear();
 
 	vertices = {
 		// Position					// Normal				// Color			// TexCoord
-		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		 																					 
-		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
+		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		 												  	  						
+		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
 		 					 																 
-		{ {-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ {-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ {-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
+		{ {-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ {-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ {-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ {-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ {-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		 																	 
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
 		 																					 
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		 																					 
-		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		 																					 
-		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} },
-		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 1.0f} },
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{1.0f, 0.0f} },
-		{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 0.0f} },
-		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},	 {1.0f, 1.0f, 1.0f},	{0.0f, 1.0f} }
+		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ { 0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ {-0.5f, -0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		 														 
+		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} },
+		{ { 0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 1.0f} },
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ { 0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
+		{ {-0.5f,  0.5f,  0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
+		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} }
 	};
 
 	for (uint32_t i = 0; i < vertices.size(); ++i)
 		indices.push_back(i);
 }
 
-void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
 {
 	vertices.clear(); 
 	indices.clear();
@@ -163,7 +163,7 @@ void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& i
 			s = (float)j / SECTOR_COUNT;
 			t = (float)i / STACK_COUNT;
 
-			vertices.push_back({ {x, y, z}, {nx, ny, nz}, {1.0f, 1.0f, 1.0f}, {s, t}});
+			vertices.push_back({ {x, y, z}, {nx, ny, nz}, color, {s, t}});
 		}
 	}
 

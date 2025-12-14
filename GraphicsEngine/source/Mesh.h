@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 #include "GraphicsTypes.h"
 
 const float PI = 3.141592f;
@@ -17,8 +17,8 @@ struct Vertex {
 
 class Mesh {
 public:
-	static void SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
-	static void SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
-	static void SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
-	static void SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
+	static void SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color = glm::vec3(1.0f));
+	static void SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color = glm::vec3(1.0f));
+	static void SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color = glm::vec3(1.0f));
+	static void SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color = glm::vec3(1.0f));
 };

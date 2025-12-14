@@ -1,23 +1,24 @@
 #include <glad/glad.h>
-#include "glm/glm/gtc/type_ptr.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "MeshRenderer.h"
 #include "Camera.h"
 
-MeshRenderer::MeshRenderer(MeshType modelType, Camera* _camera)
+MeshRenderer::MeshRenderer(MeshType _modelType, Camera* _camera,
+	glm::vec3 _position, glm::vec3 _scale, glm::vec3 _color)
 {
 	camera = _camera;
-	scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	position = glm::vec3(0.0f, 0.0f, 0.0f);
+	scale = _scale;
+	position = _position;
 
-	switch (modelType)
+	switch (_modelType)
 	{
-	case TRIANGLE: Mesh::SetTriangleData(vertices, indices);
+	case TRIANGLE: Mesh::SetTriangleData(vertices, indices, _color);
 		break;
-	case QUAD: Mesh::SetQuadData(vertices, indices);
+	case QUAD: Mesh::SetQuadData(vertices, indices, _color);
 		break;
-	case CUBE: Mesh::SetCubeData(vertices, indices);
+	case CUBE: Mesh::SetCubeData(vertices, indices, _color);
 		break;
-	case SPHERE: Mesh::SetSphereData(vertices, indices);
+	case SPHERE: Mesh::SetSphereData(vertices, indices, _color);
 		break;
 	}
 
@@ -32,18 +33,19 @@ MeshRenderer::MeshRenderer(MeshType modelType, Camera* _camera)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) *	indices.size(), &indices[0], GL_STATIC_DRAW);
 
+	// Enable Position
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
 	
 	// Enable Color
-	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-		(void*)(offsetof(Vertex, Vertex::color)));*/
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::color)));
 
 	// Enable TexCoord
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-		(void*)(offsetof(Vertex, Vertex::texCoords)));
+	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::texCoords)));*/
 
-	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
