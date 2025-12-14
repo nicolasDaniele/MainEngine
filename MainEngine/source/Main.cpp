@@ -2,14 +2,15 @@
 #include <glfw3.h>
 #include <iostream>
 #include "GraphicsApi.h"
+#include "glm/glm.hpp"
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
-const char* flatVSPath = "Assets/Shaders/FlatModel.vs";
-const char* flatFSPath = "Assets/Shaders/FlatModel.fs";
-const char* texturedVSPath = "Assets/Shaders/TexturedModel.vs";
-const char* texturedFSPath = "Assets/Shaders/TexturedModel.fs";
+const char* FLAT_VS_PATH = "Assets/Shaders/FlatModel.vs";
+const char* FLAT_FS_PATH = "Assets/Shaders/FlatModel.fs";
+const char* TEXTURED_VS_PATH = "Assets/Shaders/TexturedModel.vs";
+const char* TEXTURED_FS_PATH = "Assets/Shaders/TexturedModel.fs";
 
 float lastMouseXPos = WIDTH / 2.0f;
 float lastMouseYPos = HEIGHT / 2.0f;
@@ -47,8 +48,30 @@ int main()
 		return -1;
 	}
 
-	Graphics* graphics = GetGraphicsEngine(WIDTH, HEIGHT, MeshType::CUBE, window,
-							texturedVSPath, texturedFSPath);
+	CameraParams cameraParams;
+	cameraParams.fieldOfView = 45.0f;
+	cameraParams.width = WIDTH;
+	cameraParams.height = HEIGHT;
+	cameraParams.nearPlane = 0.1f;
+	cameraParams.farPlane = 100.0f;
+	cameraParams.position = glm::vec3(0.0f, 0.0f, 3.0f);
+
+	Graphics* graphics = GetGraphicsEngine(window, cameraParams);
+
+	MeshRenderer* sphereRenderer = CreateMeshRenderer(MeshType::SPHERE, graphics->GetCamera(),
+		glm::vec3(0.0f),
+		glm::vec3(0.6f),
+		glm::vec3(1.0f, 0.2f, 0.0f),
+		FLAT_VS_PATH, FLAT_FS_PATH);
+
+	MeshRenderer* cubeRenderer = CreateMeshRenderer(MeshType::CUBE, graphics->GetCamera(),
+		glm::vec3(1.5f, 0.0f, 0.0f),
+		glm::vec3(0.5f),
+		glm::vec3(0.0f, 1.0f, 0.0f),
+		FLAT_VS_PATH, FLAT_FS_PATH);
+
+	AddMeshRendererToGraphicsEngine(sphereRenderer, graphics);
+	AddMeshRendererToGraphicsEngine(cubeRenderer, graphics);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -63,7 +86,7 @@ int main()
 		HandleInput(window);
 	}
 
-	DeleteGraphicsEngine(graphics);
+	DestroyGraphicsEngine(graphics);
 	glfwTerminate();
 
 	return 0;

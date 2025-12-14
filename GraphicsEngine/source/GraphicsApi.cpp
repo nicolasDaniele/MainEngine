@@ -5,10 +5,8 @@
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "ShaderLoader.h"
-#include "TextureLoader.h"
 
-Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context, 
-					const char* vertexShaderPath, const char* fragmentShaderPath)
+Graphics::Graphics(GLFWwindow* context, CameraParams cameraParams)
 {
 	glfwMakeContextCurrent(context);
 
@@ -26,29 +24,15 @@ Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context
 
 	glEnable(GL_DEPTH_TEST);
 
-	shaderLoader = new ShaderLoader();
-
-	GLuint shaderProgram = shaderLoader->CreateProgram(vertexShaderPath,
-		fragmentShaderPath);
-
-	TextureLoader tLoader;
-	GLuint texture = tLoader.GetTextureID("Assets/Textures/wood.jpg");
-
-	// @TODO: Pass in Camera parameters in Init function
-	// Sugestion: Created a CameraParams struct
-	camera = new Camera(45.0f, width, height, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 3.0f));
-
-	meshRenderer = new MeshRenderer(meshType, camera);
-	meshRenderer->SetProgram(shaderProgram);
-	meshRenderer->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	meshRenderer->SetScale(glm::vec3(1.0f));
+	camera = new Camera(cameraParams);
 }
 
 Graphics::~Graphics()
 {
-	delete shaderLoader;
 	delete camera;
-	delete meshRenderer;
+	
+	for (MeshRenderer* renderer : meshRenderers)
+		delete renderer;
 }
 
 void Graphics::Render()
@@ -56,13 +40,8 @@ void Graphics::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.1f, 0.0f, 0.12f, 1.0f);
 
-	if (meshRenderer)
-		meshRenderer->Draw();
-}
-
-MeshRenderer* Graphics::GetMesh()
-{
-	return meshRenderer;
+	for (MeshRenderer* renderer : meshRenderers)
+		renderer->Draw();
 }
 
 Camera* Graphics::GetCamera()
@@ -70,16 +49,45 @@ Camera* Graphics::GetCamera()
 	return camera;
 }
 
+void Graphics::AddMeshRenderer(MeshRenderer* meshRenderer)
+{
+	meshRenderers.push_back(meshRenderer);
+}
+
 extern "C"
 {
-	GRAPHICS_API Graphics* GetGraphicsEngine(int width, int height, MeshType meshType, GLFWwindow* context,
-		const char* vertexShaderPath, const char* fragmentShaderPath)
+	GRAPHICS_API Graphics* GetGraphicsEngine(GLFWwindow* context, CameraParams cameraParams)
 	{
-		return new Graphics(width, height, meshType, context, vertexShaderPath, fragmentShaderPath);
+		return new Graphics(context, cameraParams);
 	}
 
-	GRAPHICS_API void DeleteGraphicsEngine(Graphics* graphicsEngine)
+	GRAPHICS_API void DestroyGraphicsEngine(Graphics* graphicsEngine)
 	{
 		delete graphicsEngine;
+	}
+
+	GRAPHICS_API MeshRenderer* CreateMeshRenderer(MeshType meshType, Camera* camera,
+		glm::vec3 position, glm::vec3 scale, glm::vec3 color,
+		const char* vertexShaderPath, const char* fragmentShaderPath)
+	{
+		ShaderLoader shaderLoader;
+		GLuint shaderProgram = shaderLoader.CreateProgram(vertexShaderPath,
+														fragmentShaderPath);
+
+		MeshRenderer* newMeshRenderer = new MeshRenderer(meshType, camera, 
+											position, scale, color);
+		newMeshRenderer->SetProgram(shaderProgram);
+
+		return newMeshRenderer;
+	}
+
+	GRAPHICS_API void AddMeshRendererToGraphicsEngine(MeshRenderer* meshRenderer, Graphics* graphicsEngine)
+	{
+		graphicsEngine->AddMeshRenderer(meshRenderer);
+	}
+
+	GRAPHICS_API void DestroyMeshRenderer(MeshRenderer* meshRendererToDestroy)
+	{
+		delete meshRendererToDestroy;
 	}
 }
