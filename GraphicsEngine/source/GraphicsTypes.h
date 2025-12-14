@@ -1,6 +1,7 @@
 #pragma once
 
-enum MeshType {
+enum MeshType 
+{
 	TRIANGLE = 1,
 	QUAD = 2,
 	CUBE = 3,
