@@ -6,6 +6,11 @@
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
+const char* flatVSPath = "Assets/Shaders/FlatModel.vs";
+const char* flatFSPath = "Assets/Shaders/FlatModel.fs";
+const char* texturedVSPath = "Assets/Shaders/TexturedModel.vs";
+const char* texturedFSPath = "Assets/Shaders/TexturedModel.fs";
+
 float lastMouseXPos = WIDTH / 2.0f;
 float lastMouseYPos = HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -42,7 +47,8 @@ int main()
 		return -1;
 	}
 
-	Graphics* graphics = GetGraphicsEngine(WIDTH, HEIGHT, MeshType::SPHERE, window);
+	Graphics* graphics = GetGraphicsEngine(WIDTH, HEIGHT, MeshType::CUBE, window,
+							texturedVSPath, texturedFSPath);
 
 	while (!glfwWindowShouldClose(window))
 	{

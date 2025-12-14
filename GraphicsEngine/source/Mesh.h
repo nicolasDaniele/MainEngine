@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include "glm/glm/glm.hpp"
 #include "GraphicsTypes.h"
 

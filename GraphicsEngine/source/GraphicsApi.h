@@ -6,8 +6,6 @@
 	#define GRAPHICS_API __declspec(dllimport)
 #endif
 
-#include <glad/glad.h>
-#include <glfw3.h>
 #include "GraphicsTypes.h"
 
 class MeshRenderer;
@@ -17,7 +15,8 @@ class ShaderLoader;
 class GRAPHICS_API Graphics
 {
 public:
-	Graphics(int width, int height, MeshType meshType, GLFWwindow* context);
+	Graphics(int width, int height, MeshType meshType, GLFWwindow* context,
+		const char* vertexShaderPath = "", const char* fragmentShaderPath = "");
 	~Graphics();
 	void Render();
 	MeshRenderer* GetMesh();
@@ -31,6 +30,7 @@ private:
 
 extern "C"
 {
-	GRAPHICS_API Graphics* GetGraphicsEngine(int width, int height, MeshType meshType, GLFWwindow* context);
+	GRAPHICS_API Graphics* GetGraphicsEngine(int width, int height, MeshType meshType, GLFWwindow* context,
+		const char* vertexShaderPath = "", const char* fragmentShaderPath = "");
 	GRAPHICS_API void DeleteGraphicsEngine(Graphics* graphicsEngine);
 }

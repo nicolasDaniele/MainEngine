@@ -1,39 +1,42 @@
 #include <glad/glad.h>
+#include <glfw3.h>
 #include <iostream>
 #include "GraphicsApi.h"
 #include "MeshRenderer.h"
 #include "Camera.h"
 #include "ShaderLoader.h"
+#include "TextureLoader.h"
 
-Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context)
+Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context, 
+					const char* vertexShaderPath, const char* fragmentShaderPath)
 {
 	glfwMakeContextCurrent(context);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "[GraphicsEngine] Failed to initialize GLAD\n";;
+		std::cout << "[GraphicsEngine] Failed to initialize GLAD\n";
+		return;
 	}
 
 	if (!glad_glClear) 
 	{
 		std::cout << "[GraphicsEngine] GLAD not loaded!\n" << std::endl;
+		return;
 	}
 
 	glEnable(GL_DEPTH_TEST);
 
 	shaderLoader = new ShaderLoader();
-	// @TODO: Create enum for shader types and pass it as parameter
-	GLuint shaderProgram = shaderLoader->CreateProgram("Assets/Shaders/FlatModel.vs",
-		"Assets/Shaders/FlatModel.fs");
+
+	GLuint shaderProgram = shaderLoader->CreateProgram(vertexShaderPath,
+		fragmentShaderPath);
+
+	TextureLoader tLoader;
+	GLuint texture = tLoader.GetTextureID("Assets/Textures/wood.jpg");
 
 	// @TODO: Pass in Camera parameters in Init function
+	// Sugestion: Created a CameraParams struct
 	camera = new Camera(45.0f, width, height, 0.1f, 100.0f, glm::vec3(0.0f, 0.0f, 3.0f));
-
-	if (meshType < 0 || meshType > 4)
-	{
-		std::cout << "meshType value is invalid. Must be a value between 0 and 4";
-		return;
-	}
 
 	meshRenderer = new MeshRenderer(meshType, camera);
 	meshRenderer->SetProgram(shaderProgram);
@@ -44,6 +47,8 @@ Graphics::Graphics(int width, int height, MeshType meshType, GLFWwindow* context
 Graphics::~Graphics()
 {
 	delete shaderLoader;
+	delete camera;
+	delete meshRenderer;
 }
 
 void Graphics::Render()
@@ -67,9 +72,10 @@ Camera* Graphics::GetCamera()
 
 extern "C"
 {
-	GRAPHICS_API Graphics* GetGraphicsEngine(int width, int height, MeshType meshType, GLFWwindow* context)
+	GRAPHICS_API Graphics* GetGraphicsEngine(int width, int height, MeshType meshType, GLFWwindow* context,
+		const char* vertexShaderPath, const char* fragmentShaderPath)
 	{
-		return new Graphics(width, height, meshType, context);
+		return new Graphics(width, height, meshType, context, vertexShaderPath, fragmentShaderPath);
 	}
 
 	GRAPHICS_API void DeleteGraphicsEngine(Graphics* graphicsEngine)

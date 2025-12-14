@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+#include "glm/glm/gtc/matrix_transform.hpp"
 #include "Camera.h"
 
 Camera::Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearPlane, GLfloat farPlane, glm::vec3 pos)

@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+#include "glm/glm/gtc/type_ptr.hpp"
 #include "MeshRenderer.h"
 #include "Camera.h"
 
@@ -34,14 +36,14 @@ MeshRenderer::MeshRenderer(MeshType modelType, Camera* _camera)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
 	
 	// Enable Color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-		(void*)(offsetof(Vertex, Vertex::color)));
+	/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::color)));*/
 
 	// Enable TexCoord
-	/*glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-		(void*)(offsetof(Vertex, Vertex::texCoords)));*/
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		(void*)(offsetof(Vertex, Vertex::texCoords)));
 
-	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include <vector>
 #include "Mesh.h"
 
 void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices) {

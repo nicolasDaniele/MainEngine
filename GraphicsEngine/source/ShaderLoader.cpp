@@ -1,3 +1,5 @@
+#include <glad/glad.h>
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -29,6 +31,7 @@ GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char*
 
 		return 0;
 	}
+
 	return program;
 }
 

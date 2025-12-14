@@ -1,5 +1,7 @@
-#include "TextureLoader.h"
+#include <glad/glad.h>
 #include <iostream>
+#include <string>
+#include "TextureLoader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
