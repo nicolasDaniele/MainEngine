@@ -1,17 +1,19 @@
 #include <glad/glad.h>
-#include "glm/glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "Camera.h"
 
-Camera::Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearPlane, GLfloat farPlane, glm::vec3 pos)
+Camera::Camera(CameraParams cameraParams)
 {
-	position = pos;
+	position = cameraParams.position;
 
 	forward = glm::vec3(0.0f, 0.0f, -1.0f);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
 
 	viewMatrix = glm::lookAt(position, forward, up);
-	projectionMatrix = glm::perspective(FOV, width / height, nearPlane, farPlane);
+	projectionMatrix = glm::perspective(cameraParams.fieldOfView, 
+		cameraParams.width / cameraParams.height, 
+		cameraParams.nearPlane, cameraParams.farPlane);
 
 	yaw = -90.0f;
 	pitch = 0.0f;

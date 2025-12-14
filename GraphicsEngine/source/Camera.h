@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Utils.h"
+#include "GraphicsData.h"
 
 class Camera
 {
 public:
-	Camera(GLfloat FOV, GLfloat width, GLfloat height, GLfloat nearPlane, 
-		GLfloat farPlane, glm::vec3 pos);
+	Camera(CameraParams cameraParams);
 	~Camera() {}
 	void MoveCamera(Utils::Direction direction, float deltaTime);
 	void RotateCamera(float xOffset, float yOffset, GLboolean constrainPitch = true);
