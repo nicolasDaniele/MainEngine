@@ -2,6 +2,11 @@
 
 #include "Utils.h"
 #include "GraphicsData.h"
+#include "Vectors.h"
+#include "Matrices.h"
+
+#define	Vec3 CoreMath::Vec3
+#define Mat4 CoreMath::Mat4
 
 class Camera
 {
@@ -12,22 +17,21 @@ public:
 	void RotateCamera(float xOffset, float yOffset, GLboolean constrainPitch = true);
 	void Zoom(float yOffset);
 
-	glm::mat4 GetViewMatrix();
-	glm::mat4 GetProjectionMatrix() const;
-	glm::vec3 GetCameraPosition() const;
+	Mat4 GetViewMatrix();
+	Mat4 GetProjectionMatrix() const;
+	Vec3 GetCameraPosition() const;
 	float GetZoomAmount() const;
 	void SetMovementSpeed(const float _speed);
 	void SetSensitivity(const float _sensitivity);
 	void SetZoomAmount(const float _zoomAmount);
 
 private:
-	glm::mat4 viewMatrix;
-	glm::mat4 projectionMatrix;
-	glm::vec3 position;
-	glm::vec3 forward;
-	glm::vec3 up;
-	glm::vec3 right;
-	glm::vec3 worldUp;
+	Mat4 projectionMat;
+	Vec3 position;
+	Vec3 forward;
+	Vec3 up;
+	Vec3 right;
+	Vec3 worldUp;
 	float yaw;
 	float pitch;
 	float movementSpeed;

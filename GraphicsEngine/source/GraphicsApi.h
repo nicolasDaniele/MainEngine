@@ -9,7 +9,9 @@
 #include <vector>
 #include "GraphicsTypes.h"
 #include "GraphicsData.h"
-#include "glm/glm.hpp"
+#include "Vectors.h"
+
+#define	Vec3 CoreMath::Vec3
 
 class MeshRenderer;
 class Camera;
@@ -34,11 +36,12 @@ extern "C"
 	GRAPHICS_API void DestroyGraphicsEngine(Graphics* graphicsEngineToDestroy);
 
 	GRAPHICS_API MeshRenderer* CreateMeshRenderer(MeshType meshType, Camera* camera, 
-										glm::vec3 position = glm::vec3(0.0f),
-										glm::vec3 scale = glm::vec3(1.0f),
-										glm::vec3 color = glm::vec3(1.0f),
+										Vec3 position = Vec3(0.0f, 0.0f, 0.0f),
+										Vec3 scale = Vec3(1.0f, 1.0f, 1.0f),
+										Vec3 color = Vec3(1.0f, 1.0f, 1.0f),
 										const char* vertexShaderPath = "", 
 										const char* fragmentShaderPath = "");
 	GRAPHICS_API void AddMeshRendererToGraphicsEngine(MeshRenderer* meshRenderer, Graphics* graphicsEngine);
+	GRAPHICS_API void UpdateMeshRendererPosition(MeshRenderer* meshRenderer, Vec3 newPosition);
 	GRAPHICS_API void DestroyMeshRenderer(MeshRenderer* meshRendererToDestroy);
 }

@@ -1,18 +1,17 @@
 #include <glad/glad.h>
-#include "glm/gtc/matrix_transform.hpp"
 #include "Camera.h"
+#include "MathDefinitions.h"
 
 Camera::Camera(CameraParams cameraParams)
 {
 	position = cameraParams.position;
 
-	forward = glm::vec3(0.0f, 0.0f, -1.0f);
-	up = glm::vec3(0.0f, 1.0f, 0.0f);
+	forward = Vec3(0.0f, 0.0f, -1.0f);
+	up = Vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
 
-	viewMatrix = glm::lookAt(position, forward, up);
-	projectionMatrix = glm::perspective(cameraParams.fieldOfView, 
-		cameraParams.width / cameraParams.height, 
+	projectionMat = CoreMath::Projection(cameraParams.fieldOfView,
+		cameraParams.width / cameraParams.height,
 		cameraParams.nearPlane, cameraParams.farPlane);
 
 	yaw = -90.0f;
@@ -31,17 +30,17 @@ void Camera::MoveCamera(Utils::Direction direction, float deltaTime)
 	switch (direction)
 	{
 	case Utils::FORWARD:
-		position += forward * velocity; break;
+		position = position + forward * velocity; break;
 	case Utils::BACKWARD:
-		position -= forward * velocity; break;
+		position = position - forward * velocity; break;
 	case Utils::UP:
-		position += up * velocity; break;
+		position = position + up * velocity; break;
 	case Utils::DOWN:
-		position -= up * velocity; break;
+		position = position - up * velocity; break;
 	case Utils::LEFT:
-		position -= right * velocity; break;
+		position = position - right * velocity; break;
 	case Utils::RIGHT:
-		position += right * velocity; break;
+		position = position + right * velocity; break;
 	default:
 		break;
 	}
@@ -69,27 +68,27 @@ void Camera::Zoom(const float yOffset)
 
 void Camera::UpdateVectors()
 {
-	glm::vec3 fwd;
-	fwd.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	fwd.y = sin(glm::radians(pitch));
-	fwd.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	forward = glm::normalize(fwd);
+	Vec3 fwd;
+	fwd.x = COS(DEG2RAD(yaw)) * COS(DEG2RAD(pitch));
+	fwd.y = SIN(DEG2RAD(pitch));
+	fwd.z = SIN(DEG2RAD(yaw)) * COS(DEG2RAD(pitch));
+	forward = CoreMath::Normalized(fwd);
 
-	right = glm::normalize(glm::cross(forward, worldUp));
-	up = glm::normalize(glm::cross(right, forward));
+	right = CoreMath::Normalized(CoreMath::Cross(forward, worldUp));
+	up = CoreMath::Normalized(CoreMath::Cross(right, forward));
 }
 
-glm::mat4 Camera::GetViewMatrix()
+Mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(position, position + forward, up);
+	return CoreMath::LookAt(position, position + forward, up);
 }
 
-glm::mat4 Camera::GetProjectionMatrix() const
+Mat4 Camera::GetProjectionMatrix() const
 {
-	return projectionMatrix;
+	return projectionMat;
 }
 
-glm::vec3 Camera::GetCameraPosition() const
+Vec3 Camera::GetCameraPosition() const
 {
 	return position;
 }

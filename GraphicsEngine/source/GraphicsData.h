@@ -1,14 +1,15 @@
 #pragma once
 
-#include <glad/glad.h>
-#include "glm/glm.hpp"
+#include "Vectors.h"
+
+#define	Vec3 CoreMath::Vec3
 
 struct CameraParams
 {
-	GLfloat fieldOfView;
-	GLfloat width;
-	GLfloat height;
-	GLfloat nearPlane;
-	GLfloat farPlane;
-	glm::vec3 position;
+	float fieldOfView;
+	float width;
+	float height;
+	float nearPlane;
+	float farPlane;
+	Vec3 position;
 };

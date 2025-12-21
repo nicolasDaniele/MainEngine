@@ -68,7 +68,7 @@ extern "C"
 	}
 
 	GRAPHICS_API MeshRenderer* CreateMeshRenderer(MeshType meshType, Camera* camera,
-		glm::vec3 position, glm::vec3 scale, glm::vec3 color,
+		Vec3 position, Vec3 scale, Vec3 color,
 		const char* vertexShaderPath, const char* fragmentShaderPath)
 	{
 		ShaderLoader shaderLoader;
@@ -93,6 +93,11 @@ extern "C"
 	GRAPHICS_API void AddMeshRendererToGraphicsEngine(MeshRenderer* meshRenderer, Graphics* graphicsEngine)
 	{
 		graphicsEngine->AddMeshRenderer(meshRenderer);
+	}
+
+	GRAPHICS_API void UpdateMeshRendererPosition(MeshRenderer* meshRenderer, Vec3 newPosition)
+	{
+		meshRenderer->SetPosition(newPosition);
 	}
 
 	GRAPHICS_API void DestroyMeshRenderer(MeshRenderer* meshRendererToDestroy)

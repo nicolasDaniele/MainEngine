@@ -1,7 +1,8 @@
 #include <vector>
 #include "Mesh.h"
+#include "MathDefinitions.h"
 
-void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color) {
+void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color) {
 	vertices.clear();
 	indices.clear();
 
@@ -34,7 +35,7 @@ void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 	};
 }
 
-void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
+void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
 {
 	vertices.clear();
 	indices.clear();
@@ -76,7 +77,7 @@ void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 	};
 }
 
-void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
+void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
 {
 	vertices.clear(); 
 	indices.clear();
@@ -130,7 +131,7 @@ void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 		indices.push_back(i);
 }
 
-void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, glm::vec3 color)
+void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
 {
 	vertices.clear(); 
 	indices.clear();
@@ -146,15 +147,15 @@ void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& i
 	for (int i = 0; i <= STACK_COUNT; ++i)
 	{
 		stackAngle = PI / 2 - i * stackStep;
-		xy = SPHERE_RADIUS * glm::cos(stackAngle);
-		z = SPHERE_RADIUS * glm::sin(stackAngle);
+		xy = SPHERE_RADIUS * COS(stackAngle);
+		z = SPHERE_RADIUS * SIN(stackAngle);
 
 		for (int j = 0; j <= SECTOR_COUNT; ++j)
 		{
 			sectorAngle = j * sectorStep;
 
-			x = xy * glm::cos(sectorAngle);
-			y = xy * glm::sin(sectorAngle);
+			x = xy * COS(sectorAngle);
+			y = xy * SIN(sectorAngle);
 
 			nx = x * lengthInv;
 			ny = y * lengthInv;
