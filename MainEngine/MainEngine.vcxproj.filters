@@ -18,7 +18,7 @@
     <ClCompile Include="source\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExternalLibs\glad\include\glad.c">
+    <ClCompile Include="..\Common\glad\include\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

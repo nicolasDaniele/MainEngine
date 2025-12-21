@@ -1,10 +1,12 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include <iostream>
-#include "GraphicsApi.h"
-#include "glm/glm.hpp"
+#include "GraphicsEngine/GraphicsApi.h"
+#include "Vectors.h"
 
-const int WIDTH = 800;
+#define Vec3 CoreMath::Vec3
+
+const int WIDTH = 960;
 const int HEIGHT = 600;
 
 const char* FLAT_VS_PATH = "Assets/Shaders/FlatModel.vs";
@@ -48,30 +50,38 @@ int main()
 		return -1;
 	}
 
+	// -------------------- GRAHICS SETUP -------------------- \\
+
 	CameraParams cameraParams;
 	cameraParams.fieldOfView = 45.0f;
 	cameraParams.width = WIDTH;
 	cameraParams.height = HEIGHT;
 	cameraParams.nearPlane = 0.1f;
 	cameraParams.farPlane = 100.0f;
-	cameraParams.position = glm::vec3(0.0f, 0.0f, 6.0f);
+	cameraParams.position = Vec3(0.0f, 0.0f, 8.0f);
 
 	Graphics* graphics = GetGraphicsEngine(window, cameraParams);
 
+	Vec3 ballPosition = Vec3(0.0f, 1.0f, 0.0f);
 	MeshRenderer* ball = CreateMeshRenderer(MeshType::SPHERE, graphics->GetCamera(),
-		glm::vec3(0.0f),
-		glm::vec3(0.5f),
-		glm::vec3(0.9f, 0.2f, 0.0f),
+		ballPosition,
+		Vec3(0.5f, 0.5f, 0.5f),
+		Vec3(0.9f, 0.2f, 0.0f),
 		FLAT_VS_PATH, FLAT_FS_PATH);
 
+	Vec3 floorPosition = Vec3(0.0f, -1.0f, 0.0f);
 	MeshRenderer* floor = CreateMeshRenderer(MeshType::CUBE, graphics->GetCamera(),
-		glm::vec3(0.0f, -2.0f, 0.0f),
-		glm::vec3(4.0f, 0.2f, 4.0f),
-		glm::vec3(0.2f, 0.8f, .2f),
+		floorPosition,
+		Vec3(4.0f, 0.2f, 4.0f),
+		Vec3(0.2f, 0.8f, .2f),
 		FLAT_VS_PATH, FLAT_FS_PATH);
 
 	AddMeshRendererToGraphicsEngine(ball, graphics);
 	AddMeshRendererToGraphicsEngine(floor, graphics);
+
+	// ------------------- END GRAHICS SETUP ------------------- \\
+
+
 
 	while (!glfwWindowShouldClose(window))
 	{
