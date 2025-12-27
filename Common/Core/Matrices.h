@@ -2,9 +2,6 @@
 
 #include "Vectors.h"
 
-// @TODO: in Mat2 and Mat3 modify operator * as in Mat4
-// Also, add a const version of [] operator
-
 namespace CoreMath
 {
 	typedef struct Mat2
@@ -35,6 +32,11 @@ namespace CoreMath
 		inline float* operator[] (int i)
 		{
 			return &(asArray[i * 2]);
+		}
+
+		inline const float* operator[](int col) const
+		{
+			return &asArray[col * 2];
 		}
 	} Mat2;
 
@@ -70,6 +72,11 @@ namespace CoreMath
 		inline float* operator[] (int i)
 		{
 			return &(asArray[i * 3]);
+		}
+
+		inline const float* operator[](int col) const
+		{
+			return &asArray[col * 3];
 		}
 	} Mat3;
 
@@ -126,9 +133,6 @@ namespace CoreMath
 	Mat2 operator* (const Mat2& matrix, float scalar);
 	Mat3 operator* (const Mat3& matrix, float scalar);
 	Mat4 operator* (const Mat4& matrix, float scalar);
-
-	bool Multiply(float* out, const float* matA, int aRows,
-		int aCols, const float* matB, int bRows, int bCols);
 
 	Mat2 operator* (const Mat2& matA, const Mat2& matB);
 	Mat3 operator* (const Mat3& matA, const Mat3& matB);
@@ -195,4 +199,4 @@ namespace CoreMath
 		float zNear, float zFar);
 	Mat4 Ortho(float left, float right, float bottom,
 		float top, float zNear, float zFar);
-};
+}
