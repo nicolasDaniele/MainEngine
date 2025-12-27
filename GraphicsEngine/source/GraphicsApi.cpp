@@ -2,15 +2,15 @@
 #include <glfw3.h>
 #include <iostream>
 #include "GraphicsApi.h"
+#include "Mesh.h"
+#include "MeshBuffer.h"
 #include "MeshRenderer.h"
+#include "MeshFactory.h"
 #include "Camera.h"
 #include "ShaderLoader.h"
-//#include "TextureLoader.h"
 
-Graphics::Graphics(GLFWwindow* context, CameraParams cameraParams)
+Graphics::Graphics(CameraParams cameraParams)
 {
-	glfwMakeContextCurrent(context);
-
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "[GraphicsEngine] Failed to initialize GLAD\n";
@@ -36,13 +36,30 @@ Graphics::~Graphics()
 		delete renderer;
 }
 
+uint32_t Graphics::CreateShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath)
+{
+	ShaderLoader shaderLoader;
+	return shaderLoader.CreateProgram(vertexShaderPath,
+		fragmentShaderPath);
+}
+
+void Graphics::DrawDebugLines(const Vec3* vertices, int count, const Mat4& vp, unsigned int shader)
+{
+}
+
 void Graphics::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.1f, 0.0f, 0.12f, 1.0f);
 
+	if (camera == nullptr)
+	{
+		std::cout << "[Grahics::Render] Camera is null." << std::endl;
+		return;
+	}
+
 	for (MeshRenderer* renderer : meshRenderers)
-		renderer->Draw();
+		renderer->Draw(camera->GetProjectionMatrix() * camera->GetViewMatrix());
 }
 
 Camera* Graphics::GetCamera()
@@ -57,9 +74,9 @@ void Graphics::AddMeshRenderer(MeshRenderer* meshRenderer)
 
 extern "C"
 {
-	GRAPHICS_API Graphics* GetGraphicsEngine(GLFWwindow* context, CameraParams cameraParams)
+	GRAPHICS_API Graphics* GetGraphicsEngine(CameraParams cameraParams)
 	{
-		return new Graphics(context, cameraParams);
+		return new Graphics(cameraParams);
 	}
 
 	GRAPHICS_API void DestroyGraphicsEngine(Graphics* graphicsEngine)
@@ -67,41 +84,28 @@ extern "C"
 		delete graphicsEngine;
 	}
 
-	GRAPHICS_API MeshRenderer* CreateMeshRenderer(MeshType meshType, Camera* camera,
+	GRAPHICS_API MeshRenderer* CreateMeshRenderer(Graphics* graphics, MeshType meshType,
 		Vec3 position, Vec3 scale, Vec3 color,
 		const char* vertexShaderPath, const char* fragmentShaderPath)
 	{
-		ShaderLoader shaderLoader;
-		GLuint shaderProgram = shaderLoader.CreateProgram(vertexShaderPath,
-														fragmentShaderPath);
+		Mesh mesh = MeshFactory::CreateMesh(meshType, color);
+		MeshBuffer* meshBuffer = new MeshBuffer();
+		meshBuffer->LoadMeshData(mesh);
 
+		MeshRenderer* newMeshRenderer = new MeshRenderer(meshBuffer, position, scale);
 
-		MeshRenderer* newMeshRenderer = new MeshRenderer(meshType, camera, 
-											position, scale, color);
-		newMeshRenderer->SetProgram(shaderProgram);
-	
-		// If receivie textured shaders, load textures like this
-		// @TODO: Ideally detect if it is receiving textured or flat color shaders and load the
-		// texture only if it corresponds and also enable it in MeshRenderer.cpp
-		/*TextureLoader tLoader;
-		GLuint texture = tLoader.GetTextureID("Assets/Textures/wood.jpg");*/
-		//newMeshRenderer->SetTexture(texture);
+		if (graphics == nullptr)
+			return newMeshRenderer;
+
+		uint32_t shaderProgram = graphics->CreateShaderProgram(vertexShaderPath, fragmentShaderPath);
+		newMeshRenderer->SetShaderProgram(shaderProgram);
+		graphics->AddMeshRenderer(newMeshRenderer);
 
 		return newMeshRenderer;
-	}
-
-	GRAPHICS_API void AddMeshRendererToGraphicsEngine(MeshRenderer* meshRenderer, Graphics* graphicsEngine)
-	{
-		graphicsEngine->AddMeshRenderer(meshRenderer);
 	}
 
 	GRAPHICS_API void UpdateMeshRendererPosition(MeshRenderer* meshRenderer, Vec3 newPosition)
 	{
 		meshRenderer->SetPosition(newPosition);
-	}
-
-	GRAPHICS_API void DestroyMeshRenderer(MeshRenderer* meshRendererToDestroy)
-	{
-		delete meshRendererToDestroy;
 	}
 }

@@ -1,12 +1,37 @@
-#include <vector>
+#include "MeshFactory.h"
 #include "Mesh.h"
 #include "MathDefinitions.h"
 
-void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color) {
-	vertices.clear();
-	indices.clear();
+Mesh MeshFactory::CreateMesh(MeshType meshType, const Vec3& color)
+{
+	switch (meshType)
+	{
+	case M_TRIANGLE:
+		return CreateTriangle(color);
+		break;
+	case M_QUAD:
+		return CreateQuad(color);
+		break;
+	case M_CUBE:
+		return CreateCube(color);
+		break;
+	case M_SPHERE:
+		return CreateSphere(color);
+		break;
+	default:
+		return Mesh();
+		break;
+	}
+}
 
-	vertices = {
+Mesh MeshFactory::CreateTriangle(const Vec3& color)
+{
+	Mesh mesh;
+
+	mesh.vertices.clear();
+	mesh.indices.clear();
+
+	mesh.vertices = {
 		// Vertex 0 (bottom left)
 		{ 
 			{ -1.0f, -1.0f, 0.0f },	// Position
@@ -30,17 +55,21 @@ void Mesh::SetTriangleData(std::vector<Vertex>& vertices, std::vector<uint32_t>&
 		}
 	};
 
-	indices = {
+	mesh.indices = {
 		0, 1, 2
 	};
+
+	return mesh;
 }
 
-void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
+Mesh MeshFactory::CreateQuad(const Vec3& color)
 {
-	vertices.clear();
-	indices.clear();
+	Mesh mesh;
 
-	vertices = {
+	mesh.vertices.clear();
+	mesh.indices.clear();
+
+	mesh.vertices = {
 		// Vertex 0 (top right)
 		{
 			{ 1.0f, 1.0f, 0.0f },	// Position
@@ -71,18 +100,21 @@ void Mesh::SetQuadData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 		}
 	};
 
-	indices = {
+	mesh.indices = {
 		0, 1, 3,
 		1, 2, 3
 	};
+
+	return mesh;
 }
 
-void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
+Mesh MeshFactory::CreateCube(const Vec3& color)
 {
-	vertices.clear(); 
-	indices.clear();
+	Mesh mesh;
+	mesh.vertices.clear();
+	mesh.indices.clear();
 
-	vertices = {
+	mesh.vertices = {
 		// Position					// Normal				// Color			// TexCoord
 		{ {-0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 0.0f} },
 		{ { 0.5f, -0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{1.0f, 0.0f} },
@@ -127,14 +159,18 @@ void Mesh::SetCubeData(std::vector<Vertex>& vertices, std::vector<uint32_t>& ind
 		{ {-0.5f,  0.5f, -0.5f},  {0.0f, 0.0f, 0.0f},		  color,			{0.0f, 1.0f} }
 	};
 
-	for (uint32_t i = 0; i < vertices.size(); ++i)
-		indices.push_back(i);
+	for (uint32_t i = 0; i < mesh.vertices.size(); ++i)
+		mesh.indices.push_back(i);
+
+	return mesh;
 }
 
-void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, Vec3 color)
+Mesh MeshFactory::CreateSphere(const Vec3& color)
 {
-	vertices.clear(); 
-	indices.clear();
+	Mesh mesh;
+
+	mesh.vertices.clear(); 
+	mesh.indices.clear();
 
 	float x, y, z, xy;	// Vertex Position
 	float nx, ny, nz;	// Vertex Normal
@@ -164,7 +200,7 @@ void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& i
 			s = (float)j / SECTOR_COUNT;
 			t = (float)i / STACK_COUNT;
 
-			vertices.push_back({ {x, y, z}, {nx, ny, nz}, color, {s, t}});
+			mesh.vertices.push_back({ {x, y, z}, {nx, ny, nz}, color, {s, t}});
 		}
 	}
 
@@ -179,16 +215,16 @@ void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& i
 		{
 			if (i != 0)
 			{
-				indices.push_back(k1);
-				indices.push_back(k2);
-				indices.push_back(k1 + 1);
+				mesh.indices.push_back(k1);
+				mesh.indices.push_back(k2);
+				mesh.indices.push_back(k1 + 1);
 			}
 
 			if (i != (STACK_COUNT - 1))
 			{
-				indices.push_back(k1 + 1);
-				indices.push_back(k2);
-				indices.push_back(k2 + 1);
+				mesh.indices.push_back(k1 + 1);
+				mesh.indices.push_back(k2);
+				mesh.indices.push_back(k2 + 1);
 			}
 
 			lineIndices.push_back(k1);
@@ -201,4 +237,6 @@ void Mesh::SetSphereData(std::vector<Vertex>& vertices, std::vector<uint32_t>& i
 			}
 		}
 	}
+
+	return mesh;
 }

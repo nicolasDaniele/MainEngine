@@ -2,7 +2,7 @@
 
 #include "Vectors.h"
 
-#define	Vec3 CoreMath::Vec3
+using Vec3 = CoreMath::Vec3;
 
 struct CameraParams
 {

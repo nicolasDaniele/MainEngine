@@ -2,8 +2,8 @@
 
 enum MeshType 
 {
-	TRIANGLE = 1,
-	QUAD = 2,
-	CUBE = 3,
-	SPHERE = 4
+	M_TRIANGLE = 1,
+	M_QUAD = 2,
+	M_CUBE = 3,
+	M_SPHERE = 4
 };

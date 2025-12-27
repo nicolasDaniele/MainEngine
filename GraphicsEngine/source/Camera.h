@@ -5,8 +5,8 @@
 #include "Vectors.h"
 #include "Matrices.h"
 
-#define	Vec3 CoreMath::Vec3
-#define Mat4 CoreMath::Mat4
+using Vec3 = CoreMath::Vec3;
+using Mat4 = CoreMath::Mat4;
 
 class Camera
 {

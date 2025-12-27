@@ -4,7 +4,7 @@
 #include "GraphicsEngine/GraphicsApi.h"
 #include "Vectors.h"
 
-#define Vec3 CoreMath::Vec3
+using Vec3 = CoreMath::Vec3;
 
 const int WIDTH = 960;
 const int HEIGHT = 600;
@@ -60,27 +60,25 @@ int main()
 	cameraParams.farPlane = 100.0f;
 	cameraParams.position = Vec3(0.0f, 0.0f, 8.0f);
 
-	Graphics* graphics = GetGraphicsEngine(window, cameraParams);
+	Graphics* graphics = GetGraphicsEngine(/*window, */cameraParams);
 
 	Vec3 ballPosition = Vec3(0.0f, 1.0f, 0.0f);
-	MeshRenderer* ball = CreateMeshRenderer(MeshType::SPHERE, graphics->GetCamera(),
+	MeshRenderer* ball = CreateMeshRenderer(graphics, MeshType::M_SPHERE,
 		ballPosition,
+		//Vec3(1.0f, 1.0f, 1.0f),
 		Vec3(0.5f, 0.5f, 0.5f),
 		Vec3(0.9f, 0.2f, 0.0f),
 		FLAT_VS_PATH, FLAT_FS_PATH);
 
 	Vec3 floorPosition = Vec3(0.0f, -1.0f, 0.0f);
-	MeshRenderer* floor = CreateMeshRenderer(MeshType::CUBE, graphics->GetCamera(),
+	MeshRenderer* floor = CreateMeshRenderer(graphics, MeshType::M_CUBE,
 		floorPosition,
+		//Vec3(0.5f, 0.5f, 0.5f),
 		Vec3(4.0f, 0.2f, 4.0f),
 		Vec3(0.2f, 0.8f, .2f),
 		FLAT_VS_PATH, FLAT_FS_PATH);
 
-	AddMeshRendererToGraphicsEngine(ball, graphics);
-	AddMeshRendererToGraphicsEngine(floor, graphics);
-
 	// ------------------- END GRAHICS SETUP ------------------- \\
-
 
 
 	while (!glfwWindowShouldClose(window))
