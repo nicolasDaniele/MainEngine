@@ -172,4 +172,4 @@ namespace CoreMath
 		float dot = Dot(vec, normal);
 		return vec - normal * (dot * 2.0f);
 	}
-};
+}

@@ -199,4 +199,4 @@ namespace CoreMath
 		float zNear, float zFar);
 	Mat4 Ortho(float left, float right, float bottom,
 		float top, float zNear, float zFar);
-};
+}

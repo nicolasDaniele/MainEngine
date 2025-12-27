@@ -85,4 +85,4 @@ namespace CoreMath
 
 	Vec2 Reflection(const Vec2& vec, const Vec2& normal);
 	Vec3 Reflection(const Vec3& vec, const Vec3& normal);
-};
+}

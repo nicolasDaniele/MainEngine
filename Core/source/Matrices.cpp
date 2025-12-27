@@ -580,4 +580,4 @@ namespace CoreMath
 			1.0f
 		);
 	}
-};
+}
