@@ -21,8 +21,8 @@ namespace CoreGeometry
 
 	Vec3 GetMin(const AABB& aabb)
 	{
-		Vec3 p1 = aabb.position + aabb.size;
-		Vec3 p2 = aabb.position - aabb.size;
+		Vec3 p1 = aabb.center + aabb.halfExtents;
+		Vec3 p2 = aabb.center - aabb.halfExtents;
 
 		return Vec3(fminf(p1.x, p2.x),
 			fminf(p1.y, p2.y), 
@@ -31,8 +31,8 @@ namespace CoreGeometry
 
 	Vec3 GetMax(const AABB& aabb)
 	{
-		Vec3 p1 = aabb.position + aabb.size;
-		Vec3 p2 = aabb.position - aabb.size;
+		Vec3 p1 = aabb.center + aabb.halfExtents;
+		Vec3 p2 = aabb.center - aabb.halfExtents;
 
 		return Vec3(fmaxf(p1.x, p2.x),
 			fmaxf(p1.y, p2.y),
@@ -51,7 +51,7 @@ namespace CoreGeometry
 
 	bool PointInSphere(const Point& point, const Sphere& sphere)
 	{
-		float magSq = MagnitudeSq(point - sphere.position);
+		float magSq = MagnitudeSq(point - sphere.center);
 		float radSq = sphere.radius * sphere.radius;
 
 		return magSq < radSq;
@@ -59,11 +59,11 @@ namespace CoreGeometry
 
 	Point ClosestPoint(const Sphere& sphere, const Point& point)
 	{
-		Vec3 sphereToPoint = point - sphere.position;
+		Vec3 sphereToPoint = point - sphere.center;
 		Normalize(sphereToPoint);
 		sphereToPoint = sphereToPoint * sphere.radius;
 
-		return sphereToPoint + sphere.position;
+		return sphereToPoint + sphere.center;
 	}
 
 	bool PointInAABB(const Point& point, const AABB& aabb)
@@ -103,7 +103,7 @@ namespace CoreGeometry
 
 	bool PointInOBB(const Point& point, const OBB& obb)
 	{
-		Vec3 dir = point - obb.position;
+		Vec3 dir = point - obb.center;
 
 		for (int i = 0; i < 3; ++i)
 		{
@@ -114,11 +114,11 @@ namespace CoreGeometry
 				orientation[2]);
 
 			float distance = Dot(dir, axis);
-			if (distance > obb.size.asArray[i])
+			if (distance > obb.halfExtents.asArray[i])
 			{
 				return false;
 			}
-			if (distance < -obb.size.asArray[i])
+			if (distance < -obb.halfExtents.asArray[i])
 			{
 				return false;
 			}
@@ -129,8 +129,8 @@ namespace CoreGeometry
 
 	Point ClosestPoint(const OBB& obb, const Point& point)
 	{
-		Point result = obb.position;
-		Vec3 dir = point - obb.position;
+		Point result = obb.center;
+		Vec3 dir = point - obb.center;
 
 		for (int i = 0; i < 3; ++i)
 		{
@@ -141,13 +141,13 @@ namespace CoreGeometry
 				orientation[2]);
 
 			float distance = Dot(dir, axis);
-			if (distance > obb.size.asArray[i])
+			if (distance > obb.halfExtents.asArray[i])
 			{
-				distance = obb.size.asArray[i];
+				distance = obb.halfExtents.asArray[i];
 			}
-			if (distance < -obb.size.asArray[i])
+			if (distance < -obb.halfExtents.asArray[i])
 			{
-				distance = -obb.size.asArray[i];
+				distance = -obb.halfExtents.asArray[i];
 			}
 
 			result = result + (axis * distance);
@@ -243,8 +243,8 @@ namespace CoreGeometry
 	Interval GetInterval(const OBB& obb, const Vec3& axis)
 	{
 		Vec3 vertex[8];
-		Vec3 C = obb.position;
-		Vec3 E = obb.size;
+		Vec3 C = obb.center;
+		Vec3 E = obb.halfExtents;
 
 		const float* O = obb.orientation.asArray;
 
@@ -360,8 +360,8 @@ namespace CoreGeometry
 		std::vector<Vec3> vertices;
 		vertices.resize(8);
 
-		Vec3 center = obb.position;
-		Vec3 extents = obb.size;
+		Vec3 center = obb.center;
+		Vec3 extents = obb.halfExtents;
 		const float* orientation = obb.orientation.asArray;
 		Vec3 axes[] =
 		{
@@ -404,8 +404,8 @@ namespace CoreGeometry
 
 	std::vector<Plane> GetPlanes(const OBB& obb)
 	{
-		Vec3 center = obb.position;
-		Vec3 extents = obb.size;
+		Vec3 center = obb.center;
+		Vec3 extents = obb.halfExtents;
 		const float* orientation = obb.orientation.asArray;
 
 		Vec3 axes[] =

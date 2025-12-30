@@ -40,35 +40,35 @@ namespace CoreGeometry
 
 	typedef struct Sphere
 	{
-		Point position;
+		Point center;
 		float radius;
 
 		inline Sphere() : radius(1.0f) { }
 		inline Sphere(const Point& p, float r) :
-			position(p), radius(r) { }
+			center(p), radius(r) { }
 	} Sphere;
 
 	typedef struct AABB
 	{
-		Point position;
-		Vec3 size;
+		Point center;
+		Vec3 halfExtents;
 
-		inline AABB() : size(1, 1, 1) { }
+		inline AABB() : halfExtents(1, 1, 1) { }
 		inline AABB(const Point& p, const Vec3& s) :
-			position(p), size(s) { }
+			center(p), halfExtents(s) { }
 	} AABB;
 
 	typedef struct OBB
 	{
-		Point position;
-		Vec3 size;
+		Point center;
+		Vec3 halfExtents;
 		Mat3 orientation;
 
-		inline OBB() : size(1, 1, 1) { }
+		inline OBB() : halfExtents(1, 1, 1) { }
 		inline OBB(const Point& p, const Vec3& s) :
-			position(p), size(s) { }
+			center(p), halfExtents(s) { }
 		inline OBB(const Point& p, const Vec3& s, const Mat3& o) :
-			position(p), size(s), orientation(o) { }
+			center(p), halfExtents(s), orientation(o) { }
 	} OBB;
 
 	typedef struct Plane
