@@ -26,6 +26,31 @@ Graphics::Graphics(CameraParams cameraParams)
 	glEnable(GL_DEPTH_TEST);
 
 	camera = new Camera(cameraParams);
+
+	// FOR DEBUG
+	glGenVertexArrays(1, &debugVAO);
+	glGenBuffers(1, &debugVBO);
+
+	glBindVertexArray(debugVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, debugVBO);
+
+	// position
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(
+		0, 3, GL_FLOAT, GL_FALSE,
+		sizeof(DebugVertex),
+		(void*)offsetof(DebugVertex, position)
+	);
+
+	// color
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(
+		1, 3, GL_FLOAT, GL_FALSE,
+		sizeof(DebugVertex),
+		(void*)offsetof(DebugVertex, color)
+	);
+
+	glBindVertexArray(0);
 }
 
 Graphics::~Graphics()
@@ -34,6 +59,9 @@ Graphics::~Graphics()
 	
 	for (MeshRenderer* renderer : meshRenderers)
 		delete renderer;
+
+	if (debugVBO) glDeleteBuffers(1, &debugVBO);
+	if (debugVAO) glDeleteVertexArrays(1, &debugVAO);
 }
 
 uint32_t Graphics::CreateShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath)
@@ -43,8 +71,39 @@ uint32_t Graphics::CreateShaderProgram(const char* vertexShaderPath, const char*
 		fragmentShaderPath);
 }
 
-void Graphics::DrawDebugLines(const Vec3* vertices, int count, const Mat4& vp, unsigned int shader)
+void Graphics::DrawDebugLines(const Vec3* vertices, int vertexCount,
+	uint32_t shaderProgram, Vec3 color)
 {
+	if (vertexCount <= 0)
+		return;
+
+	std::vector<DebugVertex> debugVerts;
+	debugVerts.reserve(vertexCount);
+
+	for (int i = 0; i < vertexCount; ++i)
+		debugVerts.push_back({ vertices[i], color });
+
+
+	Mat4 vp = camera->GetProjectionMatrix() * camera->GetViewMatrix();
+
+	glUseProgram(shaderProgram);
+
+	GLint vpLoc = glGetUniformLocation(shaderProgram, "vp");
+	glUniformMatrix4fv(vpLoc, 1, GL_FALSE, vp.asArray);
+
+	glBindVertexArray(debugVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, debugVBO);
+
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		debugVerts.size() * sizeof(DebugVertex),
+		debugVerts.data(),
+		GL_DYNAMIC_DRAW
+	);
+
+	glDrawArrays(GL_LINES, 0, vertexCount);
+
+	glBindVertexArray(0);
 }
 
 void Graphics::Render()
@@ -84,6 +143,7 @@ extern "C"
 		delete graphicsEngine;
 	}
 
+	// @TODO: Receive int instead of MeshType
 	GRAPHICS_API MeshRenderer* CreateMeshRenderer(Graphics* graphics, MeshType meshType,
 		Vec3 position, Vec3 scale, Vec3 color,
 		const char* vertexShaderPath, const char* fragmentShaderPath)

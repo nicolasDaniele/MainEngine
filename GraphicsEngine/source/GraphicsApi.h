@@ -10,7 +10,6 @@
 #include "IGraphics.h"
 #include "GraphicsTypes.h"
 #include "GraphicsData.h"
-#include "Vectors.h"
 
 using Vec3 = CoreMath::Vec3;
 
@@ -23,9 +22,10 @@ public:
 	Graphics(CameraParams cameraParams);
 	~Graphics();
 
-	uint32_t CreateShaderProgram(const char* vs, const char* fs) override;
-	void DrawDebugLines(const Vec3* vertices,int count,
-				const Mat4& vp,	unsigned int shader) override;
+	uint32_t CreateShaderProgram(const char* vertexShaderPath,
+		const char* fragmentShaderPath) override;
+	void DrawDebugLines(const Vec3* vertices, int vertexCount,
+		uint32_t shaderProgram, Vec3 color = Vec3(1.0f, 1.0f, 1.0f)) override;
 
 	void Render();
 	Camera* GetCamera();
@@ -34,6 +34,9 @@ public:
 private:
 	Camera* camera = nullptr;
 	std::vector<MeshRenderer*> meshRenderers;
+
+	uint32_t debugVAO = 0;
+	uint32_t debugVBO = 0;
 };
 
 extern "C"

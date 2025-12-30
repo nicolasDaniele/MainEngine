@@ -13,3 +13,9 @@ struct CameraParams
 	float farPlane;
 	Vec3 position;
 };
+
+struct DebugVertex
+{
+	Vec3 position;
+	Vec3 color;
+};
